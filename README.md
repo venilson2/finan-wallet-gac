@@ -1,5 +1,22 @@
 # Finan GAC API Documentation
 
+## Como rodar o projeto
+
+1. Clone o repositório e navegue até a pasta:
+   ```bash
+   git clone https://github.com/venilson2/finan-wallet-gac.git
+   cd finan-wallet-gac
+   
+2. Suba os containers:
+   ```bash
+   docker-compose up -d
+
+3. Acesse a aplicação em:
+   ```bash
+   http://localhost:8080
+  
+
+
 ## Authentication
 
 ### Login
@@ -162,7 +179,3 @@
 - **Errors:**
   - **400 Bad Request:** The transfer has already been reversed.
   - **404 Not Found:** The specified transfer does not exist.
-
-
-## Digram Class
-
