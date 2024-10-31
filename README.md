@@ -15,6 +15,8 @@
    ```bash
    http://localhost:8080
   
+[Baixar Finan GAC.postman_collection.json](https://github.com/user-attachments/files/17588039/Finan.GAC.postman_collection.json)
+
 
 
 ## Authentication
