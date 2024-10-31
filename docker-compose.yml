@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finan-wallet-gac-api
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - finanwalletgacnet
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    container_name: postgres_db
+    environment:
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_USER: "root"
+      POSTGRES_DB: "finangac"
+    ports:
+      - "5432:5432"
+    networks:
+      - finanwalletgacnet
+
+  loki:
+    image: grafana/loki:2.7.5
+    ports:
+      - "3100:3100"
+    command: 
+      - config.file=/etc/loki/local-config.yaml
+      - print-config-stderr=true
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml
+    networks:
+      - finanwalletgacnet
+
+  promtail:
+    image: grafana/promtail:2.7.5
+    volumes:
+      - ./promtail/config/config.yaml:/etc/promtail/config.yaml
+      - '/var/logs:/logs/syslogs'
+      - ./logs:/logs 
+      - './promtail/position:/position'
+    ports: 
+      - 9080:9080
+    depends_on:
+      - loki
+      - app
+    networks:
+      - finanwalletgacnet
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+    networks:
+      - finanwalletgacnet
+  
+networks:
+  finanwalletgacnet:
+    driver: bridge
+
+volumes:
+  postgres_data:
